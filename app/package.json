@@ -1,0 +1,21 @@
+{
+  "name": "fastclass-studio-dev",
+  "version": "0.2.0",
+  "description": "Development tools for fastclass Studio",
+  "main": "src/scripts/main.js",
+  "scripts": {
+    "postinstall": "bower install && gulp build",
+    "build": "gulp build",
+    "fetch": "bower install && gulp bower"
+  },
+  "author": "Jan Oevermann <jan.oevermann@hs-karlsruhe.de>",
+  "license": "MIT",
+  "dependencies": {
+    "main-bower-files": "^2.13.1",
+    "requirejs": "^2.3.3"
+  },
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "gulp": "^3.9.1"
+  }
+}

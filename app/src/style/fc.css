@@ -1,0 +1,179 @@
+/*@import "icons.css";*/
+@import "../vendor/spectre.css";
+/*@import "../vendor/selectize.css";*/
+/*@import "lib/spectre-exp.css";*/
+
+body {
+	font-family: "Open Sans", "Segoe UI", ".SFNSText-Regular", "San Francisco",  "Roboto", "Helvetica Neue", "Lucida Grande", sans-serif;
+}
+
+header {
+	border-bottom: 1px solid #666;
+}
+
+.fade-enter-active, .fade-leave-active {
+ 	 transition: opacity .5s
+}
+.fade-enter, .fade-leave-to {
+	opacity: 0
+}
+
+.card {
+	border-color: #bbb;
+}
+
+.card-body h2 {
+	text-align: center;
+}
+
+svg {
+	width: 100%; 
+	height: 100%;
+}
+
+code {
+	font-size: 0.8em;
+}
+
+pre code {
+	line-height: 1.2rem;
+}
+
+h6.lang {
+	font-size: 10pt;
+}
+
+#logo {
+	float: left;
+	font-weight: 300;
+	font-size: 20pt; 
+	cursor:pointer; 
+	display:inline-block;
+	margin-right: 20px;
+}
+
+#manageModel, #manageClassification {
+	margin-top: 25px;
+}
+
+#model-name, #classifiedFile {
+	font-weight: 300;
+	padding-top: 2px;
+}
+
+#model-name {
+	font-size: 20pt;	
+}
+
+#classifiedFile {
+	font-size: 16pt;
+}
+
+#model-name:hover {
+	outline: 1px dashed #666;
+}
+
+#load-modal .modal-container {
+	height: 50%;
+	width: 50%;
+}
+
+#load-modal .modal-body {
+	height: 80%;
+}
+
+.bar, progress {
+    display: inline-block;
+    width: 30% !important;
+    margin-left: 50px !important;
+}
+
+.dropdown {
+	display: inline-block;
+}
+
+.dropdown small {
+	font-weight: 700;
+	color: #666;
+	display: inline-block;
+	width: 100%;
+	margin-top: 10px;
+	border-bottom: 1px solid #666;
+}
+
+.navbar-entries {
+	width: 100%;
+	display: inline-block;
+}
+
+.navbar-section {
+	width: 100%;
+}
+
+.navbar .dropdown-toggle {
+	margin-top: 7px;
+}
+
+.navbar {
+	font-weight: 500;
+}
+
+.inactive {
+	cursor: default;
+	color: #666;
+}
+
+.avatar {
+	cursor:pointer; 
+}
+
+.caret {
+	width: 0;
+	height: 0;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 4px solid #5764c6;
+	display: inline-block;
+	margin-bottom: 3px;
+}
+
+.indicator {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 7.5px;
+    margin-bottom: 5px;
+    margin-left: 15px;
+    opacity: 0.6;
+}
+
+.indicator-bad {
+	background-color: #961a1a;
+}
+.indicator-medium {
+	background-color: #d8d23a;
+}
+.indicator-good {
+	background-color: #6ada6a;
+}
+.indicator-neutrla {
+	background-color: #a9c2bc;
+}
+
+.example-tile-icon {
+    -webkit-align-content: space-around;
+    align-content: space-around;
+    -webkit-align-items: center;
+    align-items: center;
+    background: #5764c6;
+    border-radius: .2rem;
+    color: #fff;
+    display: flex;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    -ms-flex-align: center;
+    -ms-flex-line-pack: distribute;
+    font-size: 2.4rem;
+    height: 4rem;
+    width: 4rem;
+}

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+	<!-- 
+		fastclass DEMO for SEMANTiCS 2017
+		(c) 2017 Jan Oevermann
+		jan.oevermann@hs-karlsruhe.de
+		License: MIT
+
+		More information: http://janoevermann.de
+	-->
+	<head>
+		<meta charset="utf-8">
+		<meta name="author" content="Jan Oevermann">
+		<meta name="description" content="fastclass Studio">
+		<link rel="stylesheet" type="text/css" href="style/fc.css">
+		<title>fastclass - Demo SEMANTiCS 2017</title>
+	</head>
+	<body>
+		<div id="studio">
+			<div class="container grid-960">
+				<header class="navbar">
+					<nav class="navbar-section">
+						<div class="navbar-entries">
+							<div id="logo"><i>fast</i><b>class</b></div>
+							<div class="dropdown">
+								<a href="#" class="btn btn-link dropdown-toggle" tabindex="0">
+									Model <i class="icon-caret caret"></i>
+								</a>
+								<ul class="menu">
+									<li class="menu-item">
+										<a class="no-link" id="new_model" href="#">New model</a>
+									</li>
+									<li class="menu-item">
+										<a class="no-link" id="load_model" href="#">Load model</a>
+									</li>
+									<li class="menu-item">
+										<a class="no-link" id="load_demo" href="#">Load demo</a>
+									</li>
+									<hr/>
+									<li class="menu-item">
+										<a href="#training">Current model</a>
+									</li>
+								</ul>
+							</div>
+							</a>
+							
+							<div class="dropdown">
+								<a href="#" class="btn btn-link dropdown-toggle" tabindex="0">
+									Classify <i class="icon-caret caret"></i>
+								</a>
+								<ul class="menu">
+									<li class="menu-item">
+										<a href="#classify">Classify file</a>
+									</li>
+									<li class="menu-item">
+										<a class="no-link" id="import_demo" href="#">Load demo</a>
+									</li>
+									<hr/>
+									<li class="menu-item">
+										<a href="#classify">Current classification</a>
+									</li>
+								</ul>
+							</div>
+
+							<div class="dropdown float-right">
+								<a href="#" class="btn btn-link dropdown-toggle" tabindex="0">
+									More <i class="icon-caret caret"></i>
+								</a>
+								<ul class="menu">
+									<li class="menu-item">
+										<a href="http://dev.fastclass.de">Latest version</a>
+									</li>
+									<li class="menu-item">
+										<a href="http://www.janoevermann.de">Author website</a>
+									</li>
+									<hr/>
+									<li class="menu-item">
+										<a class="no-link" id="clear_data" href="#">Delete data</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</nav>
+				</header>
+
+				<div class="modal" id="modal">
+					<div class="modal-overlay"></div>
+					<div class="modal-container">
+						<div class="modal-header">
+							<button id="modal-x" class="btn btn-clear float-right"></button>
+							<div class="modal-title" id="modal-title"></div>
+						</div>
+						<div class="modal-body">
+							<div class="content" id="modal-content"></div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-primary" id="modal-ok">OK</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal" id="new-modal">
+					<div class="modal-overlay" id="new-modal-overlay"></div>
+					<div class="modal-container">
+						<div class="modal-header">
+							<button id="new-modal-x" class="btn btn-clear float-right"></button>
+							<div class="modal-title">New model</div>
+						</div>
+						<div class="modal-body">
+							<div class="content">If you create a new model without saving, all data will be lost. Continue?</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn" id="new-modal-cancel">Cancel</button>
+							<button class="btn btn-primary" id="new-modal-continue">Continue</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal" id="load-modal">
+					<div class="modal-overlay" id="load-modal-overlay"></div>
+					<div class="modal-container">
+						<div class="modal-header">
+							<div class="content" id="modal-content">
+								<button id="load-modal-x" class="btn btn-clear float-right"></button>
+								<ul class="tab tab-block">
+									<li class="tab-item">
+										<a href="#" id="from-browser">Browser</a>
+									</li>
+									<li class="tab-item">
+										<a href="#" id="from-filesystem">File</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="modal-body">
+							<div>Choose a model:</div>
+							<div class="columns" class="tab-panel" id="load-from-browser">
+								<div class="column col-8">
+									<small id="no-local-models">No models saved in browser</small>
+									<select style="display:none;" placeholder="Models saved in browser" id="localModel"></select>
+								</div>
+								<div class="column col-4">
+									<button class="btn" id="load_localModel">Load model</button>
+								</div>
+							</div>
+							<div class="columns" class="tab-panel" id="load-from-filesystem" style="display:none">
+								<div class="column col-8">
+									<input type="file" name="input" id="fileModel" accept=".fcm">
+								</div>
+								<div class="column col-4">
+									<button class="btn" id="load_fileModel">Load file</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<section id="panel_start">
+					
+					<div class="empty" style="margin-top:50px;">
+						<h4 class="empty-title">Automated Classification &amp; Modularization <strong>Demo Implementation</strong>.</h4>
+						<p class="empty-meta"><i>for paper</i><br> Semantic Annotation of Heterogeneous Data Sources:<br>Towards an Integrated Information Framework for Service Technicians</p>
+
+						<a class="empty-action btn btn-primary" href="#training">Use own data</a>&nbsp;
+						<a class="empty-action btn" id="demo">Use demo data</a>
+					</div>
+
+					<div class="toast" style="margin-top:20px;">
+						Demo for SEMANTiCS 2017 <kbd class="float-right">Build: 07.06.17</kbd>
+					</div>
+
+				</section>
+
+				<section id="panel_training" style="display:none;">
+					
+					<div id="manageModel"> 
+						<div class="columns">
+							<div class="column col-9 float-right" id="model-name" contenteditable>Unnamed model </div> 
+							<div class="column col-3">
+								<div class="dropdown">
+									<a href="#" class="btn dropdown-toggle" tabindex="0">
+										Save model <i class="icon-caret caret"></i>
+									</a>
+									<ul class="menu">
+										<li class="menu-item">
+											<a href="#" class="no-link" id="save_fcm">Download</a>
+										</li>
+										<li class="menu-item">
+											<a href="#" class="no-link" id="save_locally">Save in browser</a>
+										</li>
+										<div class="divider"></div>
+										<li class="menu-item ">
+											<a href="#" class="no-link" id="save_source">Save source data</a>
+										</li>
+									</ul>
+								</div>
+							<button class="btn float-right" id="add_data">Add data</button>
+						</div>
+					</div>
+
+					<div class="columns" id="importFile">
+						<div class="column col-12">
+							<div class="card">
+								<div class="card-body">             
+									<input type="file" name="input" id="userinput">
+
+									<span id="import" class="loading" style="display:none;"></span>
+
+									<button class="btn float-right" id="import_json" style="display:none;">Import JSON</button>
+									<button class="btn float-right" id="import_xml" style="display:none;">Import XML</button>
+									<button class="btn float-right" id="load_fcm" style="display:none;">Load model</button>
+									<small style="clear:both" id="disclaimer"><br>No data is transfered to or saved on a server. All processing is done locally in your browser.</small>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="columns" id="prepareTrainingData">
+						<div class="column col-12">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Prepare training data</h4>
+									<h6 class="card-meta">You can either use JSON or XML data for training. Provided data must have a certain structure for processing.</h6>
+								</div>
+								<div class="card-body"> 
+									<p class="lead">JSON</p>
+									<small>Array of objects. One object per content component.<br/> The property <code>txt</code> contains textual content, the property <code>clf</code> the classification.</small>
+									<div>
+										<pre><code style="white-space:pre;">[ 
+	  {
+		"clf": "CLASSIFICATION OF THE CONTENT COMPONENT", 
+		"txt": "TEXTUAL CONTENT OF THE CONTENT COMPONENT"
+	  }
+	]</code></pre>
+										<p class="lead">XML</p>
+										<small>One element per content component, with an attribute containing the classification.</small>
+										<div>
+											<pre><code style="white-space:pre;">&lt;node class="CLASSIFICATION OF THE CONTENT COMPONENT"&gt;
+	  TEXTUAL CONTENT OF THE CONTENT COMPONENT
+	&lt;/node&gt;</code></pre>
+										</div>
+										<p>Element name(s) and attribute name can be chosen at import time.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div id="xmlAnalysis" style="display:none;">
+						<div class="columns">
+							<div class="column col-12">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">XML options</h4>
+										<h6 class="card-meta">Please choose which XML elements represent content components and which attribute contains the classification.</h6>
+									</div>
+									<div class="card-body">             
+										<div class="form-group">
+											<select style="display:none;" placeholder="Element(s) with content components" id="xmlElem" multiple></select>
+											<select style="display:none;" placeholder="Attribute with classification" id="xmlAttr"></select>
+										</div>
+										<div class="form-group">
+											<br/>
+											<label class="form-switch">
+												<input type="checkbox" id="showSignalSelection"/>
+												<i class="form-icon"></i> Semantic weighting
+											</label>
+										</div>
+										<div class="form-group" id="signalSelection" style="display:none;">
+											<select id="xmlElemSignal" placeholder="Weighted element(s)" multiple></select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div id="trainingAnalysis" style="display:none;">
+						<div class="columns">
+							<div class="column col-3">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Content components</h4>
+										<h6 class="card-meta">Number of analyzed content components</h6>
+									</div>
+									<div class="card-body">
+										<h2 id="tA_cnt">?</h2>
+									</div>
+								</div>
+							</div>
+							<div class="column col-3">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Classes</h4>
+										<h6 class="card-meta">Number of classes used in the training data</h6>
+									</div>
+									<div class="card-body">
+										<h2 id="tA_cls">?</h2>
+									</div>
+								</div>
+							</div>
+							<div class="column col-3">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Size</h4>
+										<h6 class="card-meta">Average word count per content component</h6>
+									</div>
+									<div class="card-body">
+										<h2 id="tA_avg">?</h2>
+									</div>
+								</div>
+							</div>
+							<div class="column col-3">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Time</h4>
+										<h6 class="card-meta">Time needed for training in browser</h6>
+									</div>
+									<div class="card-body">
+										<h2 id="tA_tme">?</h2>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="columns">
+							<div class="column col-12">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Class distribution</h4>
+										<h6 class="card-meta">Number of analyzed content components per class (mouseover for more information on a class)</h6>
+									</div>
+									<div class="card-body">
+										<div id="tA_plot" style="height:800px;width:900px;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section id="panel_classify" style="display:none;">
+					<div id="panel_classify_warning" class="toast toast-danger" style="margin-top:20px;">
+						<span style="font-size:20px;display:inline-block;margin-right:10px;">&#9888;</span>
+						To use this function you have to train a model first. Start <a href="#training">here</a>.
+					</div>
+
+					<div id="manageClassification" style="display:none;"> 
+						<div class="columns">
+							<div class="column col-8">
+								<div class="tile tile-centered">
+									<div class="tile-content">
+										<div class="tile-title" id="classifiedFile">Unknown file</div>
+										<div class="tile-meta">classified with model: <a href="#training" id="clModelName"></a></div>
+									</div>
+								</div>
+							</div> 
+							<div class="column col-2">
+								<div class="dropdown">
+									<a href="#" class="btn dropdown-toggle float-right" tabindex="0">
+										Save results <i class="icon-caret caret"></i>
+									</a>
+									<ul class="menu">
+										<li class="menu-item">
+											<a href="#" class="no-link" id="export_wa">WebAnnotations</a>
+										</li>
+										<div class="divider"></div>
+										<li class="menu-item">
+											<a href="#" class="no-link" id="export_results">Raw data</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="column col-2">
+								<button class="btn float-right disabled" id="add_data">New classification</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="columns" id="classificationData" style="display: none;">
+						<div class="column col-12">
+							<div class="card">
+								<div class="card-body">             
+									<input type="file" name="input" id="userinput_cl"><div id="classify" style="display:none;" class="loading"></div>
+									
+									<div id="status_cl_bar" class="bar" style="display:none;">
+										<div id="status_cl" class="bar-item tooltip" data-tooltip="0%" style="width:0%;"></div>
+									</div>
+									
+									<button class="btn float-right" id="import_json_cl" style="display:none;">Classify JSON</button>
+									<button class="btn float-right" id="import_xml_cl" style="display:none;">Classify XML</button>
+									<button class="btn float-right" id="import_pdf_cl" style="display:none;">Classify PDF</button>
+									<button class="btn float-right" id="import_demo" style="display:none;">Load PDF analysis</button>
+									
+									<small style="clear:both" id="disclaimer_cl"><br>No data is transfered to or saved on a server. All processing is done locally in your browser.</small>
+									<small style="display:none;" id="disclaimer_demo"><br>Clicking this button will load the analysis of a real-world PDF document.</small>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="columns" id="prepareClassificationData">
+						<div class="column col-12">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Prepare classification data</h4>
+									<h6 class="card-meta">You can either use JSON or XML data for training. Provided data must have a certain structure for processing.</h6>
+								</div>
+								<div class="card-body"> 
+									<p class="lead">JSON</p>
+									<small>Array of objects. One object per content component.<br/> The property <code>txt</code> contains textual content, the property <code>xid</code> the id of the content component.</small>
+									<div>
+										<pre><code style="white-space:pre;">[ 
+	  {
+		"xid": "ID OF THE CONTENT COMPONENT", 
+		"txt": "TEXTUAL CONTENT OF THE CONTENT COMPONENT" 
+	  }
+	]</code></pre>
+										<p class="lead">XML</p>
+										<small>One element per content component, with an attribute containing the id of the content component.</small>
+										<div>
+											<pre><code style="white-space:pre;">&lt;node id="ID OF THE CONTENT COMPONENT"&gt;
+	  TEXTUAL CONTENT OF THE CONTENT COMPONENT
+	&lt;/node&gt;</code></pre>
+										</div>
+										<p>Element name(s) and attribute name can be chosen at import time.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="columns" id="xmlAnalysis_cl" style="display:none;">
+						<div class="column col-12">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">XML options</h4>
+									<h6 class="card-meta">Please choose which XML elements represent content components and which attribute contains the id of the content component.</h6>
+								</div>
+								<div class="card-body">             
+									<div class="form-group">
+										<select style="display:none;" placeholder="Elements with content components" id="xmlElem_cl" multiple></select>
+										<select style="display:none;" placeholder="Attribute with ID" id="xmlAttr_cl"></select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div id="classificationAnalysis" style="display:none;">
+						<div class="columns">
+							<div class="column col-3">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Classes</h4>
+										<h6 class="card-meta">Number of classes found</h6>
+									</div>
+									<div class="card-body">
+										<h2 id="cA_cls">?</h2>
+										<p>of <span id="cAM_cls"></span> classes in model</p>
+									</div>
+								</div>
+							</div>
+							<div class="column col-6">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Confidence distribution</h4>
+									</div>
+									<div class="card-body" style="padding: 0 27px;" id="cA_histogramChart"></div>
+								</div>
+							</div>
+							<div class="column col-3">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Time</h4>
+										<h6 class="card-meta">Processing time</h6>
+									</div>
+									<div class="card-body">
+										<h2 id="cA_tme">?</h2>
+										<p>for <span id="cA_cnt"></span> classified objects</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="classDistributionAnalysis" style="display: none;">
+							<div class="columns">
+								<div class="column col-12">
+									<div class="card">
+										<div class="card-header">
+											<h4 class="card-title">Class sequence</h4>
+											<h6 class="card-meta">Shows the sequence of classes over the document compared to confidence.</h6>
+										</div>
+										<div class="card-body">
+											<div id="cA_scatterPlot" style="height:500px;width:900;"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="confidenceAnalysis" style="display: none;">
+							<div class="columns">
+								<div class="column col-12">
+									<div class="card">
+										<div class="card-header">
+											<h4 class="card-title">Confidence sequence</h4>
+											<h6 class="card-meta">Shows the sequence of confidence scores over the document compared to a threshold.</h6>
+										</div>
+										<div class="card-body">
+											<div id="cA_lineChart" style="height:500px;width:900px;"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="columns">
+							<div class="column col-12">
+								<div class="card">
+									<div class="card-header">
+										<h4 class="card-title">Class distribution</h4>
+										<h6 class="card-meta">Number of analyzed content components per class (mouseover for more information on a class).</h6>
+									</div>
+									<div class="card-body">
+										<div id="cA_plot" style="height:800px;width:900px;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+		<script data-main="scripts/main.js" src="vendor/require.js"></script>
+	</body>
+</html>
